@@ -1,12 +1,8 @@
-const controller = require('./controller')
+const controller = require('http/controllers/controller');
 
 class homeController extends controller {
     index(req, res) {
-        res.send(this.test());
-    }
-
-    test(){
-        return 'testy :)'
+        res.render('home');
     }
 }
 

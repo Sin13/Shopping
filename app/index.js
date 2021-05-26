@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const validator = require('express-validator');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
@@ -25,10 +24,9 @@ module.exports = class Application {
     setConfig() {
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
-        app.set('views', path.resolve('..', 'resource', 'views'));
+        app.set('views', path.resolve('resource', 'views'));
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
-        app.use(validator());
         app.use(session({
             secret: 'joyboy',
             resave: true,
