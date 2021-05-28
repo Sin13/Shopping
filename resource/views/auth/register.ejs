@@ -8,14 +8,7 @@
                 <div class="card-body">
                     <form class="form-horizontal" method="POST" action="/register">
 
-                        <% if(messages.length > 0) { %> 
-                        <div class="alert alert-danger alert-dismissible fade show">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>                            
-                            <% messages.forEach(error => { %>
-                                <%= error %><br>
-                            <% }) %>
-                        </div>
-                        <% } %>
+                       <%- include('./../layouts/errors-layout') %>
                         
                         <div class="form-group">
                             <label for="name" class="control-label">نام کامل</label>

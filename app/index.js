@@ -23,7 +23,7 @@ module.exports = class Application {
 
     setConfig() {
         require('app/passport/passport-local');
-        
+
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
         app.set('views', path.resolve('resource', 'views'));
@@ -36,7 +36,9 @@ module.exports = class Application {
             store: MongoStore.create({
                 mongooseConnection: mongoose.connection,
                 mongoUrl: 'mongodb://localhost/shopDB'
-            })
+            }),
+            // 6 hours
+            cookie: { expires: new Date(Date.now() + 1000 * 60 * 60 * 6) }
         }));
         app.use(cookieParser('joyboy'));
         app.use(flash());

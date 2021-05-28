@@ -4,7 +4,7 @@ const passport = require('passport');
 
 class registerController extends controller {
     showForm(req, res) {
-        res.render('auth/register', { messages: req.flash('errors'), recaptcha: this.recaptcha.render() });
+        res.render('auth/register', { errors: req.flash('errors'), recaptcha: this.recaptcha.render() });
     }
 
     register(req, res, next) {
@@ -17,11 +17,9 @@ class registerController extends controller {
     }
 
     async validate(req) {
-        await check('name', 'فیلد نام نمیتواند خالی بماند').notEmpty().run(req);
         await check('name', 'فیلد نام نمیتواند کمتر از 5 کاراکتر باشد').isLength({ min: 5 }).run(req);
         await check('email', 'فیلد ایمیل نمیتواند خالی بماند').notEmpty().run(req);
         await check('email', 'فیلد ایمیل معتبر نیست').isEmail().run(req);
-        await check('password', 'فیلد پسورد نمیتواند خالی بماند').notEmpty().run(req);
         await check('password', 'فیلد پسورد نمیتواند کمتر از 8 کاراکتر باشد').isLength({ min: 8 }).run(req);
 
 
@@ -38,7 +36,7 @@ class registerController extends controller {
     }
 
     registerProcess(req, res, next) {
-        passport.authenticate('local', {
+        passport.authenticate('local-register', {
             failureRedirect: '/register',
             successRedirect: '/',
             failureFlash: true

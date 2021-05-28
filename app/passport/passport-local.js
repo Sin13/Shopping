@@ -13,7 +13,7 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
-passport.use(new localStrategy({
+passport.use('local-register', new localStrategy({
     usernameField: 'email',
     passReqToCallback: true
 },
@@ -29,8 +29,21 @@ passport.use(new localStrategy({
             });
 
             newUser.save()
-            .then(() => done(null, newUser))
-            .catch((err) => done(err, false, req.flash('errors', 'ثبت نام با موفقیت انجام نشد لطفا دوباره سعی کنید')));
-    });
+                .then(() => done(null, newUser))
+                .catch((err) => done(err, false, req.flash('errors', 'ثبت نام با موفقیت انجام نشد لطفا دوباره سعی کنید')));
+        });
+    }
+));
+
+passport.use('local-login', new localStrategy({
+    usernameField: 'email',
+    passReqToCallback: true
+},
+    (req, email, password, done) => {
+        User.findOne({ email: email }, function (err, user) {
+            if (err) return done(err);
+            if (!user || !user.comparePasswords(password)) return done(null, false, req.flash('errors', 'آدرس ایمیل یا رمز عبور صحیح نیست'));
+            else done(null, user);
+        });
     }
 ));
