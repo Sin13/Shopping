@@ -1,4 +1,4 @@
-const controller = require('http/controllers/controller');
+const controller = require('app/http/controllers/controller');
 
 class homeController extends controller {
     index(req, res) {

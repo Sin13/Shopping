@@ -22,6 +22,8 @@ module.exports = class Application {
     }
 
     setConfig() {
+        require('app/passport/passport-local');
+        
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
         app.set('views', path.resolve('resource', 'views'));
@@ -38,6 +40,8 @@ module.exports = class Application {
         }));
         app.use(cookieParser('joyboy'));
         app.use(flash());
+        app.use(passport.initialize());
+        app.use(passport.session());
     }
 
     setMongooseConnection() {
@@ -51,7 +55,7 @@ module.exports = class Application {
     }
 
     setrouters() {
-        app.use(require('routes/api'));
-        app.use(require('routes/web'));
+        app.use(require('app/routes/api'));
+        app.use(require('app/routes/web'));
     }
 }

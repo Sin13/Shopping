@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 // controllers
-const homeController = require('http/controllers/homeController')
-const loginController = require('http/controllers/auth/loginController')
-const registerController = require('http/controllers/auth/registerController')
+const homeController = require('app/http/controllers/homeController')
+const loginController = require('app/http/controllers/auth/loginController')
+const registerController = require('app/http/controllers/auth/registerController')
 
 // home routes
 router.get('/', homeController.index)
