@@ -7,8 +7,9 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
+const expressLayouts = require('express-ejs-layouts');
 const appLocals = require('./appLocals');
-const rememberLogin = require('app/http/middlewares/rememberLogin');
+const rememberLogin = require('app/http/middleware/rememberLogin');
 
 module.exports = class Application {
 
@@ -29,10 +30,16 @@ module.exports = class Application {
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
         app.set('views', path.resolve('resource', 'views'));
+        
+        // express-ejs-layouts configs
+        app.use(expressLayouts);
+        app.set('layout', 'home/master');
+        // app.set("layout extractScripts", true);
+
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
         app.use(session({
-            secret: 'joyboy',
+            secret: process.env.SESSION_SECRET_KEY,
             resave: true,
             saveUninitialized: true,
             store: MongoStore.create({
@@ -42,7 +49,7 @@ module.exports = class Application {
             // 6 hours
             cookie: { expires: new Date(Date.now() + 1000 * 60 * 60 * 6) }
         }));
-        app.use(cookieParser('joyboy'));
+        app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
         app.use(flash());
         app.use(passport.initialize());
         app.use(passport.session());

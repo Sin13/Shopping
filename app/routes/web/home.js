@@ -7,7 +7,7 @@ const loginController = require('app/http/controllers/auth/loginController')
 const registerController = require('app/http/controllers/auth/registerController')
 
 // middlewares
-const hideAuthPages = require('app/http/middlewares/hideAuthPages')
+const hideAuthPages = require('app/http/middleware/hideAuthPages')
 
 // home routes
 router.get('/', homeController.index)

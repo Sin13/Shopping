@@ -4,13 +4,13 @@ const passport = require('passport');
 
 class loginController extends controller {
     showForm(req, res) {
-        res.render('auth/login', { errors: req.flash('errors'), recaptcha: this.recaptcha.render() });
+        const title = 'صفحه ورود';
+        res.render('home/auth/login', { errors: req.flash('errors'), recaptcha: this.recaptcha.render(), title });
     }
 
     login(req, res, next) {
-        // this.recaptchaValidation(req, res)
-        //     .then(() => this.validate(req))
-        this.validate(req)
+        this.recaptchaValidation(req, res)
+            .then(() => this.validate(req))
             .then((result) => {
                 if (!result) this.loginProcess(req, res, next);
                 else res.redirect('/login');
@@ -45,7 +45,7 @@ class loginController extends controller {
                 if (err) return next(err);
                 if (req.body.remember)
                     user.rememberLogin(res);
-                 return res.redirect('/');
+                return res.redirect('/');
             })
         })(req, res, next);
     }
