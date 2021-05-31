@@ -8,8 +8,9 @@ class loginController extends controller {
     }
 
     login(req, res, next) {
-        this.recaptchaValidation(req, res)
-            .then(() => this.validate(req))
+        // this.recaptchaValidation(req, res)
+        //     .then(() => this.validate(req))
+        this.validate(req)
             .then((result) => {
                 if (!result) this.loginProcess(req, res, next);
                 else res.redirect('/login');
@@ -35,10 +36,17 @@ class loginController extends controller {
     }
 
     loginProcess(req, res, next) {
-        passport.authenticate('local-login', {
-            failureRedirect: '/login',
-            successRedirect: '/',
-            failureFlash: true
+        passport.authenticate('local-login', (err, user) => {
+
+            if (err) return next(err);
+            if (!user) return res.redirect('/login');
+
+            req.login(user, (err) => {
+                if (err) return next(err);
+                if (req.body.remember)
+                    user.rememberLogin(res);
+                 return res.redirect('/');
+            })
         })(req, res, next);
     }
 

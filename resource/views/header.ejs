@@ -43,8 +43,18 @@
                     <input class="form-control" type="text" placeholder="نام محصول را وارد کنید" aria-label="Search">
                 </form>
             </div>
+
+            <% if (auth.check) { %>
+                
+            <a class="btn btn-primary mx-1 ms-5" href="/user-panel">پنل کاربری</a>
+            <a class="btn btn-danger mx-1" href="/logout">خروج</a>
+
+            <% }else { %>
+                
             <a class="btn btn-primary mx-1 ms-5" href="/login">ورود</a>
             <a class="btn btn-warning mx-1" href="/register">عضویت</a>
+
+            <% } %>
 
         </div>
     </nav>

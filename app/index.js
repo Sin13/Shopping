@@ -7,6 +7,8 @@ const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
+const appLocals = require('./appLocals');
+const rememberLogin = require('app/http/middlewares/rememberLogin');
 
 module.exports = class Application {
 
@@ -44,6 +46,11 @@ module.exports = class Application {
         app.use(flash());
         app.use(passport.initialize());
         app.use(passport.session());
+        app.use(rememberLogin.check);
+        app.use((req, res, next) => {
+            app.locals = new appLocals(req, res).auth();
+            next();
+        })
     }
 
     setMongooseConnection() {
