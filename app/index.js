@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
 const expressLayouts = require('express-ejs-layouts');
-const appLocals = require('./appLocals');
+const helpers = require('./helpers');
 const rememberLogin = require('app/http/middleware/rememberLogin');
 
 module.exports = class Application {
@@ -26,7 +26,8 @@ module.exports = class Application {
 
     setConfig() {
         require('app/passport/passport-local');
-
+        require('app/passport/passport-google');
+        
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
         app.set('views', path.resolve('resource', 'views'));
@@ -34,7 +35,8 @@ module.exports = class Application {
         // express-ejs-layouts configs
         app.use(expressLayouts);
         app.set('layout', 'home/master');
-        // app.set("layout extractScripts", true);
+        app.set("layout extractScripts", true);
+        app.set("layout extractStyles", true);
 
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
@@ -55,7 +57,7 @@ module.exports = class Application {
         app.use(passport.session());
         app.use(rememberLogin.check);
         app.use((req, res, next) => {
-            app.locals = new appLocals(req, res).auth();
+            app.locals = new helpers(req, res).getObjects();
             next();
         })
     }

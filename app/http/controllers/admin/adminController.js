@@ -1,10 +1,6 @@
 class adminController {
     index(req, res) {
-        res.send('controlled dashboard');
-    }
-
-    courses(req, res) {
-        res.send('controlled courses');
+        res.render('admin/index');
     }
 }
 
