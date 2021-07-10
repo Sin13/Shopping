@@ -1,5 +1,6 @@
 const autoBind = require('auto-bind');
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
+const { validationResult } = require('express-validator');
 
 module.exports = class controller {
     constructor() {
@@ -25,6 +26,27 @@ module.exports = class controller {
                 } else resolve();
             })
         })
-        
+
+    }
+
+    async validationData(req) {
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            const errors = result.array();
+            const messages = [];
+
+            errors.forEach(err => messages.push(err.msg));
+
+            req.flash('errors', messages)
+
+            return false;
+        }
+
+        return true;
+    }
+
+    back(req, res) {
+        req.flash('formData', req.body);
+        return res.redirect(req.header('Referer') || '/');
     }
 }

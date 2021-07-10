@@ -6,13 +6,16 @@ const passport = require('passport');
 const loginController = require('app/http/controllers/auth/loginController')
 const registerController = require('app/http/controllers/auth/registerController')
 
-// routes
+// validators 
+const registerValidator = require('app/http/validators/registerValidator');
+const loginValidator = require('app/http/validators/loginValidator');
 
+// routes
 router.get('/login', loginController.showForm);
-router.post('/login', loginController.login);
+router.post('/login',loginValidator.handle(), loginController.login);
 
 router.get('/register', registerController.showForm);
-router.post('/register', registerController.register);
+router.post('/register',registerValidator.handle(), registerController.register);
 
 router.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] }));

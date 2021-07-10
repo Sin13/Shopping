@@ -1,5 +1,4 @@
 const controller = require('app/http/controllers/controller')
-const { check, validationResult } = require('express-validator');
 const passport = require('passport');
 
 class registerController extends controller {
@@ -8,35 +7,15 @@ class registerController extends controller {
         res.render('home/auth/register', {recaptcha: this.recaptcha.render(), title });
     }
 
-    register(req, res, next) {
-        this.recaptchaValidation(req, res)
-            .then(() => this.validate(req))
-            .then(result => {
-                if (!result) this.registerProcess(req, res, next);
-                else {
-                    req.flash('formData', req.body);
-                    res.redirect('/register');
-                }
-            });
-    }
+    async register(req ,res , next) {
+        // await this.recaptchaValidation(req , res);
+        let result = await this.validationData(req)
 
-    async validate(req) {
-        await check('name', 'فیلد نام نمیتواند کمتر از 5 کاراکتر باشد').isLength({ min: 5 }).run(req);
-        await check('email', 'فیلد ایمیل نمیتواند خالی بماند').notEmpty().run(req);
-        await check('email', 'فیلد ایمیل معتبر نیست').isEmail().run(req);
-        await check('password', 'فیلد پسورد نمیتواند کمتر از 8 کاراکتر باشد').isLength({ min: 8 }).run(req);
-
-
-        const errors = validationResult(req).errors;
-        const messages = [];
-        errors.forEach(err => messages.push(err.msg));
-        if (errors.length == 0) {
-            return false;
-        }
-        else {
-            req.flash('errors', messages);
-            return true;
-        }
+        if(result) {
+            return this.registerProcess(req , res , next)
+        } 
+        
+        return this.back(req, res);
     }
 
     registerProcess(req, res, next) {
