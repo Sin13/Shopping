@@ -40,10 +40,12 @@ passport.use('local-login', new localStrategy({
     passReqToCallback: true
 },
     (req, email, password, done) => {
-        User.findOne({ email: email }, function (err, user) {
+        User.findOne({ email: email }, async function (err, user) {
             if (err) return done(err);
-            if (!user || !user.comparePasswords(password)) return done(null, false, req.flash('errors', 'آدرس ایمیل یا رمز عبور صحیح نیست'));
-            else done(null, user);
+            if (!user || !(await user.comparePasswords(password))) {
+                return done(null, false, req.flash('errors', 'آدرس ایمیل یا رمز عبور صحیح نیست'));
+            }
+            done(null, user);
         });
     }
 ));

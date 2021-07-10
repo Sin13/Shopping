@@ -5,7 +5,7 @@ const passport = require('passport');
 class registerController extends controller {
     showForm(req, res) {
         const title = 'صفحه عضویت';
-        res.render('home/auth/register', { errors: req.flash('errors'), recaptcha: this.recaptcha.render(), title });
+        res.render('home/auth/register', {recaptcha: this.recaptcha.render(), title });
     }
 
     register(req, res, next) {
@@ -13,7 +13,10 @@ class registerController extends controller {
             .then(() => this.validate(req))
             .then(result => {
                 if (!result) this.registerProcess(req, res, next);
-                else res.redirect('/register');
+                else {
+                    req.flash('formData', req.body);
+                    res.redirect('/register');
+                }
             });
     }
 

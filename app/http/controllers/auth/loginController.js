@@ -5,7 +5,7 @@ const passport = require('passport');
 class loginController extends controller {
     showForm(req, res) {
         const title = 'صفحه ورود';
-        res.render('home/auth/login', { errors: req.flash('errors'), recaptcha: this.recaptcha.render(), title });
+        res.render('home/auth/login', {recaptcha: this.recaptcha.render(), title });
     }
 
     login(req, res, next) {
@@ -13,7 +13,10 @@ class loginController extends controller {
             .then(() => this.validate(req))
             .then((result) => {
                 if (!result) this.loginProcess(req, res, next);
-                else res.redirect('/login');
+                else {
+                    req.flash('formData', req.body);
+                    res.redirect('/login');
+                }
             })
     }
 
@@ -37,7 +40,7 @@ class loginController extends controller {
 
     loginProcess(req, res, next) {
         passport.authenticate('local-login', (err, user) => {
-
+            // console.log(user);
             if (err) return next(err);
             if (!user) return res.redirect('/login');
 
