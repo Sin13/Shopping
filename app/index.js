@@ -10,6 +10,7 @@ const passport = require('passport');
 const expressLayouts = require('express-ejs-layouts');
 const helpers = require('./helpers');
 const rememberLogin = require('app/http/middleware/rememberLogin');
+const methodOverride = require('method-override');
 
 module.exports = class Application {
 
@@ -31,6 +32,8 @@ module.exports = class Application {
         app.use(express.static('public'));
         app.set('view engine', 'ejs');
         app.set('views', path.resolve('resource', 'views'));
+
+        app.use(methodOverride('_method'));
         
         // express-ejs-layouts configs
         app.use(expressLayouts);

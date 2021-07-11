@@ -9,12 +9,25 @@ class coursesController extends controller {
     async index(req, res) {
         const page = req.query.page || 1;
         const courses = await Course.paginate({}, {page ,limit : 3 ,sort: { createdAt: 1 } })
-        // return res.json(courses);
         res.render('admin/courses/index', { courses });
     }
 
     showForm(req, res) {
         res.render('admin/courses/create');
+    }
+
+    async delete(req, res) {
+        const course = await Course.findById(req.params.id);
+
+        // delete images 
+        Object.values(course.images).forEach(image => {
+            fs.unlinkSync(`./public/${image}`);
+        });
+
+        // delete course
+        course.remove();
+        
+        return res.redirect('/admin/courses');
     }
 
 
@@ -23,7 +36,7 @@ class coursesController extends controller {
 
         if (!status) {
             if (req.file)
-                fs.unlink(req.file.path, (err) => { });
+                fs.unlinkSync(req.file.path);
             return this.back(req, res);
         }
 
@@ -38,7 +51,7 @@ class coursesController extends controller {
             body,
             type,
             price,
-            images: JSON.stringify(images),
+            images: images,
             tags
         });
 
