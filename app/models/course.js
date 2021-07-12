@@ -10,6 +10,7 @@ const CourseSchema = Schema({
     body: { type: String, required: true },
     price: { type: String, required: true },
     images: { type: Object, required: true },
+    thumb : { type : String , required : true },
     tags: { type: String, required: true },
     time: { type: String, default: '00:00:00' },
     viewCount: { type: Number, default: 0 },

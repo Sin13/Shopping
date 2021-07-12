@@ -24,7 +24,19 @@ router.use((req, res, next) => {
 router.get('/', adminController.index);
 router.get('/courses', coursesController.index);
 router.get('/courses/create', coursesController.showForm);
-router.post('/courses/create', upload.single('images'), convertFileToField.handle, courseValidator.handle(), coursesController.create);
+router.post('/courses/create',
+    upload.single('images'),
+    convertFileToField.handle,
+    courseValidator.handle(),
+    coursesController.create
+);
+router.get('/courses/:id/edit' , coursesController.edit);
+router.put('/courses/:id',
+    upload.single('images'),
+    convertFileToField.handle,
+    courseValidator.handle(),
+    coursesController.update
+);
 router.delete('/courses/:id', coursesController.delete);
 
 module.exports = router;

@@ -51,7 +51,8 @@ class coursesController extends controller {
             body,
             type,
             price,
-            images: images,
+            images,
+            thumb : images[480],
             tags
         });
 
@@ -79,6 +80,42 @@ class coursesController extends controller {
         [1080, 720, 480].map(resize);
 
         return addresImages;
+    }
+
+    
+    async edit(req, res ,next) {
+        let course = await Course.findById(req.params.id);
+        if( ! course ) {
+            return res.json('چنین دوره ای وجود ندارد');
+        }
+
+        return res.render('admin/courses/edit' , { course });
+    }
+
+    async update(req, res , next) {
+        let status = await this.validationData(req);
+        if(! status) {
+            if(req.file) 
+                fs.unlinkSync(req.file.path);
+            return this.back(req,res);
+        }
+
+        let objForUpdate = {};
+
+        // set image thumb
+        objForUpdate.thumb = req.body.imagesThumb;
+
+        // check image 
+        if(req.file) {
+            objForUpdate.images = this.imageResize(req.file);
+            objForUpdate.thumb = objForUpdate.images[480];
+        }
+
+        delete req.body.images;
+        objForUpdate.slug = this.slug(req.body.title);
+        
+        await Course.findByIdAndUpdate(req.params.id , { $set : { ...req.body , ...objForUpdate }}, {useFindAndModify: false})
+        return res.redirect('/admin/courses');
     }
 
     getUrlImage(dir) {

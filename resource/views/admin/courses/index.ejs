@@ -29,7 +29,7 @@
                         <form action="http://localhost:3000/admin/courses/<%= course._id %>/?_method=DELETE" method="post">
                             <input type="hidden" name="_method" value="delete">
                             <div class="btn-group btn-group-sm">
-                                <a href="http://localhost:3000/admin/courses/2/edit" class="btn btn-primary">ویرایش</a>
+                                <a href="http://localhost:3000/admin/courses/<%= course._id %>/edit" class="btn btn-primary">ویرایش</a>
                                 <button type="submit" class="btn btn-danger">حذف</button>
                             </div>
                         </form>
