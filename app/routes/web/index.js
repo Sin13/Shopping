@@ -12,6 +12,6 @@ router.use('/admin', adminCheck.check, require('./admin'));
 router.use('/', require('./home'));
 
 // auth router
-router.use('/', hideAuthPages.check, require('./auth'));
+router.use('/auth', hideAuthPages.check, require('./auth'));
 
 module.exports = router; 

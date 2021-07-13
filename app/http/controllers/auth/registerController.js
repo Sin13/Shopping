@@ -8,7 +8,7 @@ class registerController extends controller {
     }
 
     async register(req ,res , next) {
-        // await this.recaptchaValidation(req , res);
+        await this.recaptchaValidation(req , res);
         let result = await this.validationData(req)
 
         if(result) {
@@ -20,7 +20,7 @@ class registerController extends controller {
 
     registerProcess(req, res, next) {
         passport.authenticate('local-register', {
-            failureRedirect: '/register',
+            failureRedirect: '/auth/register',
             successRedirect: '/',
             failureFlash: true
         })(req, res, next);

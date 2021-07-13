@@ -8,7 +8,7 @@ class loginController extends controller {
     }
 
     async login(req  ,res , next) {
-        // await this.recaptchaValidation(req , res);
+        await this.recaptchaValidation(req , res);
         let result = await this.validationData(req)
         console.log(result);
         if(result) {
@@ -22,7 +22,7 @@ class loginController extends controller {
         passport.authenticate('local-login', (err, user) => {
             
             if (err) return next(err);
-            if (!user) return res.redirect('/login');
+            if (!user) return res.redirect('/auth/login');
 
             req.login(user, (err) => {
                 if (err) return next(err);

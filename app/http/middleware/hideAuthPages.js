@@ -5,6 +5,7 @@ const middleware = require("./middleware");
 class hideAuthPages extends middleware {
     check(req, res, next) {
         if (req.isAuthenticated()) {
+            console.log('yoooo');
             return res.redirect('/');
         }
         next();

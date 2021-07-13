@@ -17,11 +17,11 @@ router.post('/login',loginValidator.handle(), loginController.login);
 router.get('/register', registerController.showForm);
 router.post('/register',registerValidator.handle(), registerController.register);
 
-router.get('/auth/google',
+router.get('/google',
     passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/auth/google/cb',
-    passport.authenticate('google', { failureRedirect: '/login' }),
+router.get('/google/cb',
+    passport.authenticate('google', { failureRedirect: '/auth/login' }),
     function (req, res) {
         // Successful authentication, redirect home.
         res.redirect('/');
